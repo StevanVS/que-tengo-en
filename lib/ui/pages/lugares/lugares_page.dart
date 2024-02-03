@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:que_tengo_en/domain/entities/lugar.dart';
+import 'package:que_tengo_en/ui/pages/lugares/widgets/lugar_modal.dart';
 import 'package:que_tengo_en/ui/pages/lugares/widgets/lugar_tile.dart';
 
 class LugaresPage extends StatefulWidget {
@@ -42,7 +43,9 @@ class _LugaresPageState extends State<LugaresPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          LugarModal.mostrarLugarModal(context, null);
+        },
         child: Icon(Icons.add_location_alt_rounded),
       ),
     );

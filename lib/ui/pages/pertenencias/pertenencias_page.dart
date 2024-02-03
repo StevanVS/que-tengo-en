@@ -2,28 +2,28 @@
 
 import 'package:flutter/material.dart';
 import 'package:que_tengo_en/domain/entities/lugar.dart';
-import 'package:que_tengo_en/domain/entities/objeto.dart';
-import 'package:que_tengo_en/ui/pages/objetos/widgets/objeto_tile.dart';
+import 'package:que_tengo_en/domain/entities/pertenencia.dart';
+import 'package:que_tengo_en/ui/pages/pertenencias/widgets/pertenencia_tile.dart';
 
-import 'widgets/add_objeto_button.dart';
-import 'widgets/encabezado_objetos.dart';
+import 'widgets/encabezado_lista_pertenencias.dart';
+import 'widgets/pertenencia_modal.dart';
 
-class ObjetosPage extends StatefulWidget {
-  const ObjetosPage({super.key, required this.lugar});
+class PertenenciasPage extends StatefulWidget {
+  const PertenenciasPage({super.key, required this.lugar});
 
   final Lugar lugar;
 
   @override
-  State<ObjetosPage> createState() => _ObjetosPageState();
+  State<PertenenciasPage> createState() => _PertenenciasPageState();
 }
 
-class _ObjetosPageState extends State<ObjetosPage> {
-  late List<Objeto> objetos;
+class _PertenenciasPageState extends State<PertenenciasPage> {
+  late List<Pertenencia> pertenencias;
 
   @override
   void initState() {
     super.initState();
-    objetos = Objeto.getObjetos();
+    pertenencias = Pertenencia.getPertenencias();
   }
 
   @override
@@ -39,22 +39,27 @@ class _ObjetosPageState extends State<ObjetosPage> {
           child: Column(
             children: [
               SizedBox(height: 5),
-              EncabezadoObjetos(),
+              EncabezadoListaPertenencias(),
               ListView.builder(
-                itemCount: objetos.length,
+                itemCount: pertenencias.length,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                     margin: EdgeInsets.only(top: 7),
-                    child: ObjetoTile(objeto: objetos[index]),
+                    child: PertenenciaTile(pertenencia: pertenencias[index]),
                   );
                 },
               ),
-              AddObjetoButton()
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          PertenenciaModal.mostrarPertenenciaModal(context, null);
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
