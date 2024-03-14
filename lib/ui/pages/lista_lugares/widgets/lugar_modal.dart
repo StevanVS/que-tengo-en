@@ -53,16 +53,16 @@ class _LugarModalState extends State<LugarModal> {
         mainAxisSize: MainAxisSize.min,
         children: [
           ModalHeader(
-            elemento: widget.lugar,
+            esParaCrear: widget.lugar != null,
             nombre: 'Lugar',
-            fnEliminar: () {
+            onEliminar: () {
               //TODO eliminar lugar
             },
           ),
           const SizedBox(height: 10.0),
           ModalForm(nombreController: _nombreController),
           const SizedBox(height: 16.0),
-          ModalFooter(fnAceptar: () {
+          ModalFooter(onAceptar: () {
             //TODO aceptar lugar
           }),
         ],
@@ -85,11 +85,7 @@ class ModalForm extends StatelessWidget {
       controller: _nombreController,
       // autofocus: true,
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
         hintText: "Nombre",
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
       ),
     );
   }

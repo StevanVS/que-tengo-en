@@ -1,23 +1,21 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:que_tengo_en/domain/entities/lugar.dart';
 import 'package:que_tengo_en/domain/entities/pertenencia.dart';
-import 'package:que_tengo_en/ui/pages/pertenencias/widgets/pertenencia_tile.dart';
+import 'package:que_tengo_en/ui/pages/lista_pertenencias/widgets/pertenencia_list_tile.dart';
 
 import 'widgets/encabezado_lista_pertenencias.dart';
-import 'widgets/pertenencia_modal.dart';
+import '../modal_pertenencia/modal_pertenencia.dart';
 
-class PertenenciasPage extends StatefulWidget {
-  const PertenenciasPage({super.key, required this.lugar});
+class ListaPertenenciasPage extends StatefulWidget {
+  const ListaPertenenciasPage({super.key, required this.lugar});
 
   final Lugar lugar;
 
   @override
-  State<PertenenciasPage> createState() => _PertenenciasPageState();
+  State<ListaPertenenciasPage> createState() => _ListaPertenenciasPageState();
 }
 
-class _PertenenciasPageState extends State<PertenenciasPage> {
+class _ListaPertenenciasPageState extends State<ListaPertenenciasPage> {
   late List<Pertenencia> pertenencias;
 
   @override
@@ -35,20 +33,18 @@ class _PertenenciasPageState extends State<PertenenciasPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: [
-              SizedBox(height: 5),
-              EncabezadoListaPertenencias(),
+              const SizedBox(height: 10),
+              const EncabezadoListaPertenencias(),
+              const SizedBox(height: 8),
               ListView.builder(
                 itemCount: pertenencias.length,
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    margin: EdgeInsets.only(top: 7),
-                    child: PertenenciaTile(pertenencia: pertenencias[index]),
-                  );
+                  return PertenenciaListTile(pertenencia: pertenencias[index]);
                 },
               ),
             ],
@@ -57,9 +53,9 @@ class _PertenenciasPageState extends State<PertenenciasPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          PertenenciaModal.mostrarPertenenciaModal(context, null);
+          ModalPertenencia.mostrarPertenenciaModal(context, null);
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

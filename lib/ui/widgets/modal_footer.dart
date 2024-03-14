@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 
 class ModalFooter extends StatelessWidget {
   const ModalFooter({
-    super.key, required this.fnAceptar,
+    super.key, required this.onAceptar,
   });
 
-  final void Function() fnAceptar;
+  final VoidCallback onAceptar;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        FilledButton.tonalIcon(
+        OutlinedButton.icon(
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -21,7 +21,7 @@ class ModalFooter extends StatelessWidget {
           label: const Text('Cancelar'),
         ),
         FilledButton.tonalIcon(
-          onPressed: fnAceptar,
+          onPressed: onAceptar,
           icon: const Icon(Icons.check_rounded),
           label: const Text('Aceptar'),
         ),

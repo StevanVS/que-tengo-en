@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:que_tengo_en/domain/entities/lugar.dart';
-import 'package:que_tengo_en/ui/pages/lugares/widgets/lugar_modal.dart';
-import 'package:que_tengo_en/ui/pages/pertenencias/pertenencias_page.dart';
+import 'package:que_tengo_en/ui/pages/lista_lugares/widgets/lugar_modal.dart';
+import 'package:que_tengo_en/ui/pages/lista_pertenencias/lista_pertenencias_page.dart';
 
-class LugarTile extends StatelessWidget {
-  const LugarTile({super.key, required this.lugar});
+class LugarListTile extends StatelessWidget {
+  const LugarListTile({super.key, required this.lugar});
 
   final Lugar lugar;
 
@@ -20,9 +20,7 @@ class LugarTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       leading: IconButton(
-        onPressed: () {
-          //TODO lugar favorito
-        },
+        onPressed: () {},
         icon: Icon(
           lugar.favorito ? Icons.star_rounded : Icons.star_outline_rounded,
         ),
@@ -36,7 +34,8 @@ class LugarTile extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PertenenciasPage(lugar: lugar)),
+          MaterialPageRoute(
+              builder: (context) => ListaPertenenciasPage(lugar: lugar)),
         );
       },
       contentPadding: const EdgeInsets.all(0),

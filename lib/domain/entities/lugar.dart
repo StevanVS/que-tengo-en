@@ -3,7 +3,11 @@ class Lugar {
   final String nombre;
   final bool favorito;
 
-  Lugar({required this.id, required this.nombre, required this.favorito});
+  Lugar({
+    required this.id,
+    required this.nombre,
+    this.favorito = false,
+  });
 
   static List<Lugar> getLugares() {
     return [

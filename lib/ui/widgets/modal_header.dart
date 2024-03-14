@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 class ModalHeader extends StatelessWidget {
   const ModalHeader({
     super.key,
-    this.elemento,
+    required this.esParaCrear,
     required this.nombre,
-    required this.fnEliminar,
+    required this.onEliminar,
   });
 
-  final Object? elemento;
+  final bool esParaCrear;
   final String nombre;
-  final void Function() fnEliminar;
+  final VoidCallback onEliminar;
 
   @override
   Widget build(BuildContext context) {
-    final accion = elemento == null ? 'Crear' : 'Editar';
+    final accion = esParaCrear ? 'Crear' : 'Editar';
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -34,12 +34,12 @@ class ModalHeader extends StatelessWidget {
           ),
         ),
         Visibility(
-          visible: elemento != null,
+          visible: !esParaCrear,
           maintainSize: true,
           maintainAnimation: true,
           maintainState: true,
           child: IconButton(
-            onPressed: fnEliminar,
+            onPressed: onEliminar,
             icon: const Icon(Icons.delete_rounded),
             tooltip: 'Eliminar',
           ),

@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:que_tengo_en/domain/entities/lugar.dart';
-import 'package:que_tengo_en/ui/pages/lugares/widgets/lugar_modal.dart';
-import 'package:que_tengo_en/ui/pages/lugares/widgets/lugar_tile.dart';
+import 'package:que_tengo_en/ui/pages/lista_lugares/widgets/lugar_modal.dart';
+import 'package:que_tengo_en/ui/pages/lista_lugares/widgets/lugar_list_tile.dart';
 
 class LugaresPage extends StatefulWidget {
   const LugaresPage({super.key});
@@ -37,7 +37,7 @@ class _LugaresPageState extends State<LugaresPage> {
           itemBuilder: (BuildContext context, int index) {
             return Container(
               margin: EdgeInsets.only(top: 10),
-              child: LugarTile(lugar: _lugares[index]),
+              child: LugarListTile(lugar: _lugares[index]),
             );
           },
         ),
