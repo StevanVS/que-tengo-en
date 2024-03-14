@@ -55,7 +55,7 @@ class _ModalPertenenciaState extends State<ModalPertenencia> {
     _cantidadEnLugarController.dispose();
     _cantidadParaLlevarController.dispose();
     _nombreController.dispose();
-    super.dispose();
+    super.dispose(); 
   }
 
   @override
