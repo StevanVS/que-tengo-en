@@ -1,5 +1,5 @@
 class Lugar {
-  final double id;
+  final int id;
   final String nombre;
   final bool favorito;
 

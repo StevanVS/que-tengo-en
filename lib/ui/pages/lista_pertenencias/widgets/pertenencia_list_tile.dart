@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:que_tengo_en/domain/bloc/bloc.dart';
 import 'package:que_tengo_en/domain/entities/pertenencia.dart';
 import 'package:que_tengo_en/ui/pages/modal_pertenencia/modal_pertenencia.dart';
 
@@ -9,6 +12,7 @@ class PertenenciaListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<PertenenciaBloc>();
     return ListTile(
       onTap: () {
         ModalPertenencia.mostrarPertenenciaModal(context, pertenencia);
@@ -21,15 +25,43 @@ class PertenenciaListTile extends StatelessWidget {
         horizontal: VisualDensity.minimumDensity,
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      trailing: _NumeroButton(
-        numero: pertenencia.cantidadEnLugar,
-        onPressed: () {},
-        onLongPress: () {},
-      ),
       leading: _NumeroButton(
+        numero: pertenencia.cantidadEnLugar,
+        onPressed: () {
+          bloc.add(
+            IncrementCantidad(
+              pertenencia: pertenencia,
+              tipoCantidad: TipoCantidad.enLugar,
+            ),
+          );
+        },
+        onLongPress: () {
+          bloc.add(
+            ResetCantidad(
+              pertenencia: pertenencia,
+              tipoCantidad: TipoCantidad.enLugar,
+            ),
+          );
+        },
+      ),
+      trailing: _NumeroButton(
         numero: pertenencia.cantidadParaLlevar,
-        onPressed: () {},
-        onLongPress: () {},
+        onPressed: () {
+          bloc.add(
+            IncrementCantidad(
+              pertenencia: pertenencia,
+              tipoCantidad: TipoCantidad.paraLlevar,
+            ),
+          );
+        },
+        onLongPress: () {
+          bloc.add(
+            ResetCantidad(
+              pertenencia: pertenencia,
+              tipoCantidad: TipoCantidad.paraLlevar,
+            ),
+          );
+        },
       ),
     );
   }

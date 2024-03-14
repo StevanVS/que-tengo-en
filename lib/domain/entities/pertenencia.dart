@@ -1,48 +1,77 @@
-class Pertenencia {
-  final double id;
-  final double lugarId;
+import 'dart:convert';
+
+import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
+
+class Pertenencia extends Equatable {
+  final int? id;
+  final int lugarId;
   final String nombre;
   final int cantidadEnLugar;
   final int cantidadParaLlevar;
 
-  Pertenencia({
-    required this.id,
+  const Pertenencia({
+    this.id,
     required this.lugarId,
     required this.nombre,
     required this.cantidadEnLugar,
     required this.cantidadParaLlevar,
   });
 
-  static List<Pertenencia> getPertenencias() {
+
+  Pertenencia copyWith({
+    ValueGetter<int?>? id,
+    int? lugarId,
+    String? nombre,
+    int? cantidadEnLugar,
+    int? cantidadParaLlevar,
+  }) {
+    return Pertenencia(
+      id: id != null ? id() : this.id,
+      lugarId: lugarId ?? this.lugarId,
+      nombre: nombre ?? this.nombre,
+      cantidadEnLugar: cantidadEnLugar ?? this.cantidadEnLugar,
+      cantidadParaLlevar: cantidadParaLlevar ?? this.cantidadParaLlevar,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'lugarId': lugarId,
+      'nombre': nombre,
+      'cantidadEnLugar': cantidadEnLugar,
+      'cantidadParaLlevar': cantidadParaLlevar,
+    };
+  }
+
+  factory Pertenencia.fromMap(Map<String, dynamic> map) {
+    return Pertenencia(
+      id: map['id']?.toInt(),
+      lugarId: map['lugarId']?.toInt() ?? 0,
+      nombre: map['nombre'] ?? '',
+      cantidadEnLugar: map['cantidadEnLugar']?.toInt() ?? 0,
+      cantidadParaLlevar: map['cantidadParaLlevar']?.toInt() ?? 0,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Pertenencia.fromJson(String source) => Pertenencia.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'Pertenencia(id: $id, lugarId: $lugarId, nombre: $nombre, cantidadEnLugar: $cantidadEnLugar, cantidadParaLlevar: $cantidadParaLlevar)';
+  }
+
+  @override
+  List<Object?> get props {
     return [
-      Pertenencia(
-        id: 1,
-        lugarId: 1,
-        nombre: 'Pantalon',
-        cantidadEnLugar: 1,
-        cantidadParaLlevar: 1,
-      ),
-      Pertenencia(
-        id: 2,
-        lugarId: 1,
-        nombre: 'Camiseta formal',
-        cantidadEnLugar: 0,
-        cantidadParaLlevar: 2,
-      ),
-      Pertenencia(
-        id: 3,
-        lugarId: 1,
-        nombre: 'Camiseta sencilla',
-        cantidadEnLugar: 2,
-        cantidadParaLlevar: 0,
-      ),
-      Pertenencia(
-        id: 4,
-        lugarId: 1,
-        nombre: 'Interiores',
-        cantidadEnLugar: 1,
-        cantidadParaLlevar: 3,
-      ),
+      id,
+      lugarId,
+      nombre,
+      cantidadEnLugar,
+      cantidadParaLlevar,
     ];
   }
 }

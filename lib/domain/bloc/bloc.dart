@@ -1,0 +1,1 @@
+export './pertenencia_bloc/pertenencia_bloc.dart';

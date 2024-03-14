@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:que_tengo_en/domain/bloc/bloc.dart';
 import 'package:que_tengo_en/domain/entities/lugar.dart';
-import 'package:que_tengo_en/domain/entities/pertenencia.dart';
 import 'package:que_tengo_en/ui/pages/lista_pertenencias/widgets/pertenencia_list_tile.dart';
 
 import 'widgets/encabezado_lista_pertenencias.dart';
@@ -16,12 +17,10 @@ class ListaPertenenciasPage extends StatefulWidget {
 }
 
 class _ListaPertenenciasPageState extends State<ListaPertenenciasPage> {
-  late List<Pertenencia> pertenencias;
-
   @override
   void initState() {
     super.initState();
-    pertenencias = Pertenencia.getPertenencias();
+    context.read<PertenenciaBloc>().add(GetPertenencias(lugar: widget.lugar));
   }
 
   @override
@@ -31,25 +30,48 @@ class _ListaPertenenciasPageState extends State<ListaPertenenciasPage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.lugar.nombre),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-              const EncabezadoListaPertenencias(),
-              const SizedBox(height: 8),
-              ListView.builder(
-                itemCount: pertenencias.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  return PertenenciaListTile(pertenencia: pertenencias[index]);
-                },
+      body: BlocBuilder<PertenenciaBloc, PertenenciaState>(
+        builder: (context, state) {
+          if (state.pertenenciaStatus == PertenenciaStatus.loading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (state.listaPertenencias.isEmpty) {
+            return Center(
+              child: Text(
+                'No existen Pertenencias',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
-            ],
-          ),
-        ),
+            );
+          }
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  const EncabezadoListaPertenencias(),
+                  const SizedBox(height: 8),
+                  ListView.builder(
+                    itemCount: state.listaPertenencias.length,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index) {
+                      return PertenenciaListTile(
+                        pertenencia: state.listaPertenencias[index],
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

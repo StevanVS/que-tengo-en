@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:que_tengo_en/domain/bloc/bloc.dart';
 import 'package:que_tengo_en/domain/entities/pertenencia.dart';
+import 'package:que_tengo_en/ui/pages/modal_pertenencia/widgets/number_text_field.dart';
 import 'package:que_tengo_en/ui/widgets/modal_footer.dart';
 import 'package:que_tengo_en/ui/widgets/modal_header.dart';
 
@@ -32,30 +34,25 @@ class ModalPertenencia extends StatefulWidget {
 }
 
 class _ModalPertenenciaState extends State<ModalPertenencia> {
-  late TextEditingController _nombreController;
-  late TextEditingController _cantidadEnLugarController;
-  late TextEditingController _cantidadParaLlevarController;
+  final _formKey = GlobalKey<FormState>();
+  final nombre = TextEditingController();
+  final enLugar = TextEditingController();
+  final paraLlevar = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _nombreController = TextEditingController.fromValue(
-      TextEditingValue(text: widget.pertenencia?.nombre ?? ''),
-    );
-    _cantidadEnLugarController = TextEditingController.fromValue(
-      TextEditingValue(text: '${widget.pertenencia?.cantidadEnLugar ?? ''}'),
-    );
-    _cantidadParaLlevarController = TextEditingController.fromValue(
-      TextEditingValue(text: '${widget.pertenencia?.cantidadParaLlevar ?? ''}'),
-    );
+    nombre.text = widget.pertenencia?.nombre ?? '';
+    enLugar.text = '${widget.pertenencia?.cantidadEnLugar ?? ''}';
+    paraLlevar.text = '${widget.pertenencia?.cantidadParaLlevar ?? ''}';
   }
 
   @override
   void dispose() {
-    _cantidadEnLugarController.dispose();
-    _cantidadParaLlevarController.dispose();
-    _nombreController.dispose();
-    super.dispose(); 
+    nombre.dispose();
+    enLugar.dispose();
+    paraLlevar.dispose();
+    super.dispose();
   }
 
   @override
@@ -63,90 +60,108 @@ class _ModalPertenenciaState extends State<ModalPertenencia> {
     return Container(
       padding: const EdgeInsets.all(15),
       width: MediaQuery.of(context).size.width,
-      child: Column(
-        // mainAxisSize: MainAxisSize.min,
-        children: [
-          ModalHeader(
-            esParaCrear: widget.pertenencia == null,
-            nombre: 'Pertenencia',
-            onEliminar: () {},
-          ),
-          const SizedBox(height: 10.0),
-          ModalForm(
-            nombreController: _nombreController,
-            cantidadEnLugarController: _cantidadEnLugarController,
-            cantidadParaLlevarController: _cantidadParaLlevarController,
-          ),
-          const SizedBox(height: 16.0),
-          ModalFooter(onAceptar: () {}),
-        ],
+      child: Form(
+        key: _formKey,
+        child: Column(
+          // mainAxisSize: MainAxisSize.min,
+          children: [
+            ModalHeader(
+              esParaCrear: widget.pertenencia == null,
+              nombre: 'Pertenencia',
+              onEliminar: () {
+                if (widget.pertenencia == null) return;
+
+                final bloc = context.read<PertenenciaBloc>();
+
+                bloc.add(DeletePertenencia(widget.pertenencia!));
+
+                Navigator.of(context).pop();
+              },
+            ),
+            const SizedBox(height: 10.0),
+            _ModalForm(
+              nombreController: nombre,
+              cantidadEnLugarController: enLugar,
+              cantidadParaLlevarController: paraLlevar,
+            ),
+            const SizedBox(height: 16.0),
+            ModalFooter(
+              onAceptar: () {
+                final bloc = context.read<PertenenciaBloc>();
+                final lugar = bloc.state.lugar;
+
+                if (_formKey.currentState!.validate()) {
+                  final pertenencia = widget.pertenencia != null
+                      ? widget.pertenencia!.copyWith(
+                          nombre: nombre.text,
+                          cantidadEnLugar: int.parse(enLugar.text),
+                          cantidadParaLlevar: int.parse(paraLlevar.text))
+                      : Pertenencia(
+                          lugarId: lugar!.id,
+                          nombre: nombre.text,
+                          cantidadEnLugar: int.parse(enLugar.text),
+                          cantidadParaLlevar: int.parse(paraLlevar.text));
+
+                  bloc.add(SubmitPertenencia(pertenencia));
+
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class ModalForm extends StatelessWidget {
-  const ModalForm({
-    super.key,
+class _ModalForm extends StatelessWidget {
+  const _ModalForm({
     required TextEditingController nombreController,
     required TextEditingController cantidadEnLugarController,
     required TextEditingController cantidadParaLlevarController,
-  })  : _nombreController = nombreController,
-        _cantidadEnLugarController = cantidadEnLugarController,
-        _cantidadParaLlevarController = cantidadParaLlevarController;
+  })  : _nombre = nombreController,
+        _cantidadEnLugar = cantidadEnLugarController,
+        _cantidadParaLlevar = cantidadParaLlevarController;
 
-  final TextEditingController _nombreController;
-  final TextEditingController _cantidadEnLugarController;
-  final TextEditingController _cantidadParaLlevarController;
+  final TextEditingController _nombre;
+  final TextEditingController _cantidadEnLugar;
+  final TextEditingController _cantidadParaLlevar;
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      child: Column(
-        children: [
-          TextField(
-            controller: _nombreController,
-            autofocus: true,
-            decoration: const InputDecoration(
-              hintText: "Nombre",
+    return Column(
+      children: [
+        TextFormField(
+          controller: _nombre,
+          autofocus: true,
+          decoration: const InputDecoration(
+            hintText: "Nombre",
+          ),
+          validator: (value) {
+            if ((value ?? '').trim().isEmpty) return "Este campo es requerido";
+            return null;
+          },
+        ),
+        const SizedBox(height: 10.0),
+        Row(
+          children: [
+            Expanded(
+              child: NumberTextField(
+                controller: _cantidadEnLugar,
+                icon: Icons.location_on_rounded,
+              ),
             ),
-          ),
-          const SizedBox(height: 10.0),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  textAlign: TextAlign.center,
-                  controller: _cantidadEnLugarController,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  ],
-                  decoration: const InputDecoration(
-                    hintText: "00",
-                    icon: Icon(Icons.location_on_rounded),
-                  ),
-                ),
+            const SizedBox(width: 16.0),
+            Expanded(
+              child: NumberTextField(
+                controller: _cantidadParaLlevar,
+                icon: Icons.luggage_rounded,
               ),
-              const SizedBox(width: 16.0),
-              Expanded(
-                child: TextField(
-                  textAlign: TextAlign.center,
-                  controller: _cantidadParaLlevarController,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  ],
-                  decoration: const InputDecoration(
-                    hintText: "00",
-                    icon: Icon(Icons.luggage_rounded),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

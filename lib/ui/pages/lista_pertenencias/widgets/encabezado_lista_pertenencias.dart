@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:que_tengo_en/domain/bloc/bloc.dart';
 
 class EncabezadoListaPertenencias extends StatelessWidget {
   const EncabezadoListaPertenencias({
@@ -8,13 +10,16 @@ class EncabezadoListaPertenencias extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final bloc = context.read<PertenenciaBloc>();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _IconButton(
           icon: Icons.location_on_rounded,
           onTap: () {},
-          onLongPress: () {},
+          onLongPress: () {
+            bloc.add(const ResetAllCantidad(tipoCantidad: TipoCantidad.enLugar));
+          },
         ),
         Text(
           'Nombre',
@@ -27,7 +32,9 @@ class EncabezadoListaPertenencias extends StatelessWidget {
         _IconButton(
           icon: Icons.luggage_rounded,
           onTap: () {},
-          onLongPress: () {},
+          onLongPress: () {
+            bloc.add(const ResetAllCantidad(tipoCantidad: TipoCantidad.paraLlevar));
+          },
         ),
       ],
     );
