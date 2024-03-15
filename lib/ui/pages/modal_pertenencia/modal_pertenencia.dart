@@ -59,12 +59,14 @@ class _ModalPertenenciaState extends State<ModalPertenencia> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15).copyWith(
+        bottom: MediaQuery.of(context).viewInsets.bottom + 15,
+      ),
       width: MediaQuery.of(context).size.width,
       child: Form(
         key: _formKey,
         child: Column(
-          // mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.min,
           children: [
             ModalHeader(
               esParaCrear: widget.pertenencia == null,
