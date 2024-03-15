@@ -14,7 +14,7 @@ void main() async {
 
   await Hive.initFlutter();
 
-  RepositoriesRegister();
+  await RepositoriesRegister().register();
   BlocsRegister();
 
   runApp(const BlocsProvider());

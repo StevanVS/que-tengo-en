@@ -11,20 +11,17 @@ class HivePertenenciaRepository implements PertenenciaRepository {
   final _pertenenciaStreamController =
       BehaviorSubject<List<Pertenencia>>.seeded(const []);
 
-  late Box<String> box;
+  final Box<String> _box;
 
   static const kPertenenciaDataBaseKey = '__PERTENENCIA_DB_KEY__';
   static const kPertenenciaStorageKey = '__PERTENENCIA_STORAGE_KEY__';
 
-  HivePertenenciaRepository() {
+  HivePertenenciaRepository({required Box<String> box}) : _box = box {
     _init();
   }
 
   _init() async {
-    print('hive init');
-    box = await Hive.openBox<String>(kPertenenciaDataBaseKey);
-
-    final pertenenciaJson = box.get(kPertenenciaStorageKey);
+    final pertenenciaJson = _box.get(kPertenenciaStorageKey);
 
     if (pertenenciaJson != null) {
       final pertenencias = (json.decode(pertenenciaJson) as List)
@@ -59,7 +56,7 @@ class HivePertenenciaRepository implements PertenenciaRepository {
       listaPertenencias.add(pertenencia.copyWith(id: () => id + 1));
     }
     _pertenenciaStreamController.add(listaPertenencias);
-    await box.put(kPertenenciaStorageKey, json.encode(listaPertenencias));
+    await _box.put(kPertenenciaStorageKey, json.encode(listaPertenencias));
   }
 
   @override
@@ -74,7 +71,7 @@ class HivePertenenciaRepository implements PertenenciaRepository {
     listaPertenencias.removeAt(index);
 
     _pertenenciaStreamController.add(listaPertenencias);
-    await box.put(kPertenenciaStorageKey, json.encode(listaPertenencias));
+    await _box.put(kPertenenciaStorageKey, json.encode(listaPertenencias));
   }
 
   @override
@@ -88,6 +85,6 @@ class HivePertenenciaRepository implements PertenenciaRepository {
     }).toList();
 
     _pertenenciaStreamController.add(newListaPertenencias);
-    await box.put(kPertenenciaStorageKey, json.encode(listaPertenencias));
+    await _box.put(kPertenenciaStorageKey, json.encode(listaPertenencias));
   }
 }

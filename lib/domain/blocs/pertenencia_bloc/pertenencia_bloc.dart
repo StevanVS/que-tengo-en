@@ -39,7 +39,7 @@ class PertenenciaBloc extends Bloc<PertenenciaEvent, PertenenciaState> {
     await emit.forEach(
       _repository.getPertenenciasStream(),
       onData: (pertenencias) {
-        print('onData $pertenencias');
+        debugPrint('onData $pertenencias');
         return state.copyWith(
           listaPertenencias: pertenencias,
           status: PertenenciaStatus.success,
