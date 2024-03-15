@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:que_tengo_en/domain/bloc/bloc.dart';
+import 'package:que_tengo_en/domain/blocs/blocs.dart';
 import 'package:que_tengo_en/domain/entities/pertenencia.dart';
 import 'package:que_tengo_en/ui/pages/modal_pertenencia/widgets/number_text_field.dart';
 import 'package:que_tengo_en/ui/widgets/modal_footer.dart';
@@ -69,11 +69,11 @@ class _ModalPertenenciaState extends State<ModalPertenencia> {
               esParaCrear: widget.pertenencia == null,
               nombre: 'Pertenencia',
               onEliminar: () {
-                if (widget.pertenencia == null) return;
+                if (widget.pertenencia?.id == null) return;
 
                 final bloc = context.read<PertenenciaBloc>();
 
-                bloc.add(DeletePertenencia(widget.pertenencia!));
+                bloc.add(DeletePertenencia(widget.pertenencia!.id!));
 
                 Navigator.of(context).pop();
               },

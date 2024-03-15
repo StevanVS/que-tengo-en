@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injector/injector.dart';
 
-import 'package:que_tengo_en/domain/bloc/bloc.dart';
+import 'package:que_tengo_en/domain/blocs/blocs.dart';
 import 'package:que_tengo_en/domain/entities/lugar.dart';
-import 'package:que_tengo_en/injection/blocs_register.dart';
+import 'package:que_tengo_en/injection/injection.dart';
 import 'package:que_tengo_en/ui/pages/lista_pertenencias/lista_pertenencias_page.dart';
 import 'package:que_tengo_en/ui/theme_app.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
+  RepositoriesRegister();
   BlocsRegister();
 
   runApp(const BlocsProvider());

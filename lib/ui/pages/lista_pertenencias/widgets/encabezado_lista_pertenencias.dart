@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:que_tengo_en/domain/bloc/bloc.dart';
+import 'package:que_tengo_en/domain/blocs/blocs.dart';
 
 class EncabezadoListaPertenencias extends StatelessWidget {
   const EncabezadoListaPertenencias({

@@ -55,10 +55,10 @@ class SubmitPertenencia extends PertenenciaEvent {
 }
 
 class DeletePertenencia extends PertenenciaEvent {
-  final Pertenencia pertenencia;
+  final int id;
 
-  const DeletePertenencia(this.pertenencia);
+  const DeletePertenencia(this.id);
 
   @override
-  List<Object> get props => [pertenencia];
+  List<Object> get props => [id];
 }

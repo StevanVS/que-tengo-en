@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:que_tengo_en/domain/bloc/bloc.dart';
+import 'package:que_tengo_en/domain/blocs/blocs.dart';
 import 'package:que_tengo_en/domain/entities/lugar.dart';
 import 'package:que_tengo_en/ui/pages/lista_pertenencias/widgets/pertenencia_list_tile.dart';
 
@@ -24,6 +24,12 @@ class _ListaPertenenciasPageState extends State<ListaPertenenciasPage> {
   }
 
   @override
+  void dispose() {
+    debugPrint('lista p dispose');
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -32,7 +38,7 @@ class _ListaPertenenciasPageState extends State<ListaPertenenciasPage> {
       ),
       body: BlocBuilder<PertenenciaBloc, PertenenciaState>(
         builder: (context, state) {
-          if (state.pertenenciaStatus == PertenenciaStatus.loading) {
+          if (state.status == PertenenciaStatus.loading) {
             return const Center(
               child: CircularProgressIndicator(),
             );

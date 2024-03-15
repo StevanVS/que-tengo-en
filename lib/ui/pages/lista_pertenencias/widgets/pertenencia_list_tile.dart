@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:que_tengo_en/domain/bloc/bloc.dart';
+import 'package:que_tengo_en/domain/blocs/blocs.dart';
 import 'package:que_tengo_en/domain/entities/pertenencia.dart';
 import 'package:que_tengo_en/ui/pages/modal_pertenencia/modal_pertenencia.dart';
 
