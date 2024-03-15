@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ThemeApp {
-  static ThemeData theme({bool darkTheme = true}) {
+  static ThemeData theme({bool darkTheme = false}) {
     return ThemeData(
       brightness: darkTheme ? Brightness.dark : Brightness.light,
       useMaterial3: true,
