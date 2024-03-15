@@ -87,4 +87,19 @@ class HivePertenenciaRepository implements PertenenciaRepository {
     _pertenenciaStreamController.add(newListaPertenencias);
     await _box.put(kPertenenciaStorageKey, json.encode(listaPertenencias));
   }
+
+  @override
+  Future<void> reorderListaPertenencias(int oldIndex, int newIndex) async {
+    final listaPertenencias = [..._pertenenciaStreamController.value];
+
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    
+    final Pertenencia pertenencia = listaPertenencias.removeAt(oldIndex);
+    listaPertenencias.insert(newIndex, pertenencia);
+
+    _pertenenciaStreamController.add(listaPertenencias);
+    await _box.put(kPertenenciaStorageKey, json.encode(listaPertenencias));
+  }
 }

@@ -11,7 +11,7 @@ class GetPertenencias extends PertenenciaEvent {
   final Lugar lugar;
 
   const GetPertenencias({required this.lugar});
-  
+
   @override
   List<Object> get props => [lugar];
 }
@@ -39,7 +39,8 @@ class IncrementCantidad extends PertenenciaEvent {
   final Pertenencia pertenencia;
   final TipoCantidad tipoCantidad;
 
-  const IncrementCantidad({required this.pertenencia, required this.tipoCantidad});
+  const IncrementCantidad(
+      {required this.pertenencia, required this.tipoCantidad});
 
   @override
   List<Object> get props => [pertenencia, tipoCantidad];
@@ -61,4 +62,17 @@ class DeletePertenencia extends PertenenciaEvent {
 
   @override
   List<Object> get props => [id];
+}
+
+class ReorderListaPertenencias extends PertenenciaEvent {
+  final int oldIndex;
+  final int newIndex;
+
+  const ReorderListaPertenencias({
+    required this.oldIndex,
+    required this.newIndex,
+  });
+  
+  @override
+  List<Object> get props => [oldIndex, newIndex];
 }

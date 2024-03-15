@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:que_tengo_en/domain/blocs/blocs.dart';
 import 'package:que_tengo_en/domain/entities/lugar.dart';
@@ -63,14 +64,23 @@ class _ListaPertenenciasPageState extends State<ListaPertenenciasPage> {
                   const SizedBox(height: 10),
                   const EncabezadoListaPertenencias(),
                   const SizedBox(height: 8),
-                  ListView.builder(
+                  ReorderableListView.builder(
                     itemCount: state.listaPertenencias.length,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (BuildContext context, int index) {
                       return PertenenciaListTile(
+                        key: Key('$index'),
                         pertenencia: state.listaPertenencias[index],
                       );
+                    },
+                    onReorder: (oldIndex, newIndex) {
+                      context
+                          .read<PertenenciaBloc>()
+                          .add(ReorderListaPertenencias(
+                            oldIndex: oldIndex,
+                            newIndex: newIndex,
+                          ));
                     },
                   ),
                 ],

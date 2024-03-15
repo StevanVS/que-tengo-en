@@ -23,6 +23,7 @@ class PertenenciaBloc extends Bloc<PertenenciaEvent, PertenenciaState> {
     on<IncrementCantidad>(_onIncrementCantidad);
     on<SubmitPertenencia>(_onSubmitPertenencia);
     on<DeletePertenencia>(_onDeletePertenencia);
+    on<ReorderListaPertenencias>(_onReorderListaPertenencias);
   }
 
   Future<void> _onGetPertenencias(
@@ -139,5 +140,12 @@ class PertenenciaBloc extends Bloc<PertenenciaEvent, PertenenciaState> {
     Emitter<PertenenciaState> emit,
   ) async {
     await _repository.deletePertenencia(event.id);
+  }
+
+  Future<void> _onReorderListaPertenencias(
+    ReorderListaPertenencias event,
+    Emitter<PertenenciaState> emit,
+  ) async {
+    await _repository.reorderListaPertenencias(event.oldIndex, event.newIndex);
   }
 }

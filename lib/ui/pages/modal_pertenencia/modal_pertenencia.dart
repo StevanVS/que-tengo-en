@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:que_tengo_en/domain/blocs/blocs.dart';
 import 'package:que_tengo_en/domain/entities/pertenencia.dart';
-import 'package:que_tengo_en/ui/pages/modal_pertenencia/widgets/number_text_field.dart';
 import 'package:que_tengo_en/ui/widgets/modal_footer.dart';
 import 'package:que_tengo_en/ui/widgets/modal_header.dart';
+
+import 'widgets/modal_form.dart';
 
 class ModalPertenencia extends StatefulWidget {
   const ModalPertenencia({
@@ -79,7 +80,7 @@ class _ModalPertenenciaState extends State<ModalPertenencia> {
               },
             ),
             const SizedBox(height: 10.0),
-            _ModalForm(
+            ModalForm(
               nombreController: nombre,
               cantidadEnLugarController: enLugar,
               cantidadParaLlevarController: paraLlevar,
@@ -111,57 +112,6 @@ class _ModalPertenenciaState extends State<ModalPertenencia> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _ModalForm extends StatelessWidget {
-  const _ModalForm({
-    required TextEditingController nombreController,
-    required TextEditingController cantidadEnLugarController,
-    required TextEditingController cantidadParaLlevarController,
-  })  : _nombre = nombreController,
-        _cantidadEnLugar = cantidadEnLugarController,
-        _cantidadParaLlevar = cantidadParaLlevarController;
-
-  final TextEditingController _nombre;
-  final TextEditingController _cantidadEnLugar;
-  final TextEditingController _cantidadParaLlevar;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextFormField(
-          controller: _nombre,
-          autofocus: true,
-          decoration: const InputDecoration(
-            hintText: "Nombre",
-          ),
-          validator: (value) {
-            if ((value ?? '').trim().isEmpty) return "Este campo es requerido";
-            return null;
-          },
-        ),
-        const SizedBox(height: 10.0),
-        Row(
-          children: [
-            Expanded(
-              child: NumberTextField(
-                controller: _cantidadEnLugar,
-                icon: Icons.location_on_rounded,
-              ),
-            ),
-            const SizedBox(width: 16.0),
-            Expanded(
-              child: NumberTextField(
-                controller: _cantidadParaLlevar,
-                icon: Icons.luggage_rounded,
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

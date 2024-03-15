@@ -11,6 +11,8 @@ abstract class PertenenciaRepository {
   Future<void> deletePertenencia(int id);
 
   Future<void> resetAllCantidad(TipoCantidad tipoCantidad);
+
+  Future<void> reorderListaPertenencias(int oldIndex, int newIndex);
 }
 
 class PertenenciaNotFoundException implements Exception {}
