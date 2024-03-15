@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:math';
 
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:que_tengo_en/domain/blocs/pertenencia_bloc/pertenencia_bloc.dart';
 import 'package:que_tengo_en/domain/entities/pertenencia.dart';
 import 'package:que_tengo_en/domain/repositories/pertenencia_repository.dart';
@@ -8,6 +10,31 @@ import 'package:rxdart/rxdart.dart';
 class HivePertenenciaRepository implements PertenenciaRepository {
   final _pertenenciaStreamController =
       BehaviorSubject<List<Pertenencia>>.seeded(const []);
+
+  late Box<String> box;
+
+  static const kPertenenciaDataBaseKey = '__PERTENENCIA_DB_KEY__';
+  static const kPertenenciaStorageKey = '__PERTENENCIA_STORAGE_KEY__';
+
+  HivePertenenciaRepository() {
+    _init();
+  }
+
+  _init() async {
+    print('hive init');
+    box = await Hive.openBox<String>(kPertenenciaDataBaseKey);
+
+    final pertenenciaJson = box.get(kPertenenciaStorageKey);
+
+    if (pertenenciaJson != null) {
+      final pertenencias = (json.decode(pertenenciaJson) as List)
+          .map((p) => Pertenencia.fromJson(p))
+          .toList();
+      _pertenenciaStreamController.add(pertenencias);
+    } else {
+      _pertenenciaStreamController.add(const []);
+    }
+  }
 
   @override
   Stream<List<Pertenencia>> getPertenenciasStream() {
@@ -32,6 +59,7 @@ class HivePertenenciaRepository implements PertenenciaRepository {
       listaPertenencias.add(pertenencia.copyWith(id: () => id + 1));
     }
     _pertenenciaStreamController.add(listaPertenencias);
+    await box.put(kPertenenciaStorageKey, json.encode(listaPertenencias));
   }
 
   @override
@@ -46,6 +74,7 @@ class HivePertenenciaRepository implements PertenenciaRepository {
     listaPertenencias.removeAt(index);
 
     _pertenenciaStreamController.add(listaPertenencias);
+    await box.put(kPertenenciaStorageKey, json.encode(listaPertenencias));
   }
 
   @override
@@ -59,5 +88,6 @@ class HivePertenenciaRepository implements PertenenciaRepository {
     }).toList();
 
     _pertenenciaStreamController.add(newListaPertenencias);
+    await box.put(kPertenenciaStorageKey, json.encode(listaPertenencias));
   }
 }

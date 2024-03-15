@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injector/injector.dart';
 
 import 'package:que_tengo_en/domain/blocs/blocs.dart';
@@ -8,8 +9,10 @@ import 'package:que_tengo_en/injection/injection.dart';
 import 'package:que_tengo_en/ui/pages/lista_pertenencias/lista_pertenencias_page.dart';
 import 'package:que_tengo_en/ui/theme_app.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
 
   RepositoriesRegister();
   BlocsRegister();
@@ -44,7 +47,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeApp.theme(darkTheme: true),
       theme: ThemeApp.theme(),
       themeMode: ThemeMode.system,
-      home: ListaPertenenciasPage(lugar: Lugar(id: 1, nombre: 'Portoviejo')),
+      home: ListaPertenenciasPage(lugar: Lugar(id: 1, nombre: 'Lugar')),
     );
   }
 }

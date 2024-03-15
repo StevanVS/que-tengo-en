@@ -34,11 +34,12 @@ class PertenenciaBloc extends Bloc<PertenenciaEvent, PertenenciaState> {
       status: PertenenciaStatus.loading,
     ));
 
-    await Future.delayed(const Duration(seconds: 1));
+    // await Future.delayed(const Duration(seconds: 1));
 
     await emit.forEach(
       _repository.getPertenenciasStream(),
       onData: (pertenencias) {
+        print('onData $pertenencias');
         return state.copyWith(
           listaPertenencias: pertenencias,
           status: PertenenciaStatus.success,
