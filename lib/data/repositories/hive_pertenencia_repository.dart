@@ -85,7 +85,7 @@ class HivePertenenciaRepository implements PertenenciaRepository {
     }).toList();
 
     _pertenenciaStreamController.add(newListaPertenencias);
-    await _box.put(kPertenenciaStorageKey, json.encode(listaPertenencias));
+    await _box.put(kPertenenciaStorageKey, json.encode(newListaPertenencias));
   }
 
   @override
