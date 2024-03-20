@@ -25,7 +25,7 @@ class NumberTextField extends StatelessWidget {
         LengthLimitingTextInputFormatter(2),
       ],
       decoration: InputDecoration(
-        hintText: "00",
+        hintText: "0",
         icon: Icon(icon),
       ),
       validator: (value) {

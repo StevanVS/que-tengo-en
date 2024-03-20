@@ -26,7 +26,7 @@ class NumeroButton extends StatelessWidget {
         onLongPress: onLongPress,
         child: Text(
           '$numero',
-          style: Theme.of(context).textTheme.bodyLarge,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ),
     );
