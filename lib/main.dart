@@ -4,9 +4,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injector/injector.dart';
 
 import 'package:que_tengo_en/domain/blocs/blocs.dart';
-import 'package:que_tengo_en/domain/entities/lugar.dart';
 import 'package:que_tengo_en/injection/injection.dart';
-import 'package:que_tengo_en/ui/pages/lista_pertenencias/lista_pertenencias_page.dart';
+import 'package:que_tengo_en/ui/pages/lista_lugares/lista_lugares_page.dart';
 import 'package:que_tengo_en/ui/utils/theme_app.dart';
 
 void main() async {
@@ -47,7 +46,8 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeApp.theme(darkTheme: true),
       theme: ThemeApp.theme(),
       themeMode: ThemeMode.system,
-      home: ListaPertenenciasPage(lugar: Lugar(id: 1, nombre: 'Lugar')),
+      // home: ListaPertenenciasPage(lugar: Lugar(id: 1, nombre: 'Lugar')),
+      home: const ListaLugaresPage(),
     );
   }
 }

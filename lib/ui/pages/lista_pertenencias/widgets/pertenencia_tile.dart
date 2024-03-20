@@ -49,7 +49,7 @@ class PertenenciaTile extends StatelessWidget {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: Text(
                       pertenencia.nombre,
                       // style: Theme.of(context).textTheme.bodyLarge,

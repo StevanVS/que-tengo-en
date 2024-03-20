@@ -10,35 +10,39 @@ class LugarListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
-        lugar.nombre,
-        style: const TextStyle(fontSize: 18),
-      ),
-      shape: RoundedRectangleBorder(
-        side: BorderSide(color: Theme.of(context).colorScheme.outline),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      leading: IconButton(
-        onPressed: () {},
-        icon: Icon(
-          lugar.favorito ? Icons.star_rounded : Icons.star_outline_rounded,
+    return Column(
+      children: [
+        ListTile(
+          title: Text(
+            lugar.nombre,
+            style: const TextStyle(fontSize: 18),
+          ),
+          // shape: RoundedRectangleBorder(
+          //   side: BorderSide(color: Theme.of(context).colorScheme.outline),
+          //   borderRadius: BorderRadius.circular(5),
+          // ),
+          leading: IconButton(
+            onPressed: () {},
+            icon: Icon(
+              lugar.favorito ? Icons.star_rounded : Icons.star_outline_rounded,
+            ),
+          ),
+          trailing: IconButton(
+            onPressed: () {
+              LugarModal.mostrarLugarModal(context, lugar);
+            },
+            icon: const Icon(Icons.edit_rounded),
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              ListaPertenenciasPage.router(lugar),
+            );
+          },
+          contentPadding: const EdgeInsets.all(0),
         ),
-      ),
-      trailing: IconButton(
-        onPressed: () {
-          LugarModal.mostrarLugarModal(context, lugar);
-        },
-        icon: const Icon(Icons.more_vert_rounded),
-      ),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ListaPertenenciasPage(lugar: lugar)),
-        );
-      },
-      contentPadding: const EdgeInsets.all(0),
+        const Divider(height: 0.5, thickness: 0.5)
+      ],
     );
   }
 }

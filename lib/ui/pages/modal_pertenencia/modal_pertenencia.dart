@@ -74,9 +74,9 @@ class _ModalPertenenciaState extends State<ModalPertenencia> {
               onEliminar: () {
                 if (widget.pertenencia?.id == null) return;
 
-                final bloc = context.read<PertenenciaBloc>();
-
-                bloc.add(DeletePertenencia(widget.pertenencia!.id!));
+                context
+                    .read<PertenenciaBloc>()
+                    .add(DeletePertenencia(widget.pertenencia!.id!));
 
                 Navigator.of(context).pop();
               },
@@ -96,17 +96,16 @@ class _ModalPertenenciaState extends State<ModalPertenencia> {
                 if (_formKey.currentState!.validate()) {
                   final pertenencia = widget.pertenencia != null
                       ? widget.pertenencia!.copyWith(
-                          nombre: nombre.text,
+                          nombre: nombre.text.trim(),
                           cantidadEnLugar: int.parse(enLugar.text),
                           cantidadParaLlevar: int.parse(paraLlevar.text))
                       : Pertenencia(
                           lugarId: lugar!.id,
-                          nombre: nombre.text,
+                          nombre: nombre.text.trim(),
                           cantidadEnLugar: int.parse(enLugar.text),
                           cantidadParaLlevar: int.parse(paraLlevar.text));
 
                   bloc.add(SubmitPertenencia(pertenencia));
-
                   Navigator.of(context).pop();
                 }
               },

@@ -14,6 +14,12 @@ class ListaPertenenciasPage extends StatefulWidget {
 
   @override
   State<ListaPertenenciasPage> createState() => _ListaPertenenciasPageState();
+
+  static MaterialPageRoute router(Lugar lugar) {
+    return MaterialPageRoute(
+      builder: (context) => ListaPertenenciasPage(lugar: lugar),
+    );
+  }
 }
 
 class _ListaPertenenciasPageState extends State<ListaPertenenciasPage> {
