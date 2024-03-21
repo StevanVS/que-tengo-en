@@ -29,7 +29,11 @@ class BlocsProvider extends StatelessWidget {
         BlocProvider(
           create: (context) => Injector.appInstance.get<PertenenciaBloc>()
             ..add(const SubscribePertenenciasStream()),
-        )
+        ),
+        BlocProvider(
+          create: (context) => Injector.appInstance.get<LugarBloc>()
+            ..add(const SubscribeLugaresStream()),
+        ),
       ],
       child: const MyApp(),
     );
@@ -47,7 +51,6 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeApp.theme(darkTheme: true),
       theme: ThemeApp.theme(),
       themeMode: ThemeMode.system,
-      // home: ListaPertenenciasPage(lugar: Lugar(id: 1, nombre: 'Lugar')),
       home: const ListaLugaresPage(),
     );
   }

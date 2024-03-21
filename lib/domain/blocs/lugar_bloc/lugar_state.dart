@@ -13,6 +13,8 @@ class LugarState extends Equatable {
     this.status = LugarStatus.initial,
   });
 
+  bool get esNuevoLugar => lugar == null;
+
   @override
   List<Object?> get props => [lugar, listaLugares, status];
 

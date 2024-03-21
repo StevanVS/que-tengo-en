@@ -46,8 +46,8 @@ class Pertenencia extends Equatable {
 
   factory Pertenencia.fromMap(Map<String, dynamic> map) {
     return Pertenencia(
-      id: map['id']?.toInt() ?? 0,
-      lugarId: map['lugarId']?.toInt() ?? 0,
+      id: map['id']?.toInt() ?? -1,
+      lugarId: map['lugarId']?.toInt() ?? -1,
       nombre: map['nombre'] ?? '',
       cantidadEnLugar: map['cantidadEnLugar']?.toInt() ?? 0,
       cantidadParaLlevar: map['cantidadParaLlevar']?.toInt() ?? 0,

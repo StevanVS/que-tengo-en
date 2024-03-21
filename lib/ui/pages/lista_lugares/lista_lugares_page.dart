@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:que_tengo_en/domain/entities/lugar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:que_tengo_en/domain/blocs/blocs.dart';
+import 'package:que_tengo_en/domain/blocs/lugar_bloc/lugar_bloc.dart';
 import 'package:que_tengo_en/ui/pages/lista_lugares/widgets/lugar_tile.dart';
 import 'package:que_tengo_en/ui/pages/modal_lugar/modal_lugar.dart';
+import 'package:que_tengo_en/ui/widgets/center_text_list_empty.dart';
 
 class ListaLugaresPage extends StatefulWidget {
   const ListaLugaresPage({super.key});
@@ -11,14 +14,10 @@ class ListaLugaresPage extends StatefulWidget {
 }
 
 class _ListaLugaresPageState extends State<ListaLugaresPage> {
-  late List<Lugar> _lugares;
-
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _lugares = Lugar.getLugares();
-    });
+    context.read<LugarBloc>().add(const GetLugares());
   }
 
   @override
@@ -28,14 +27,40 @@ class _ListaLugaresPageState extends State<ListaLugaresPage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('Que tengo en'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: ListView.builder(
-          itemCount: _lugares.length,
-          itemBuilder: (BuildContext context, int index) {
-            return LugarTile(lugar: _lugares[index]);
-          },
-        ),
+      body: BlocConsumer<LugarBloc, LugarState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          if (state.status == LugarStatus.loading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (state.listaLugares.isEmpty) {
+            return const CenterTextForEmptyList('No existen Lugares');
+          }
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: ReorderableListView.builder(
+              itemCount: state.listaLugares.length,
+              buildDefaultDragHandles:
+                  Theme.of(context).platform != TargetPlatform.windows,
+              itemBuilder: (BuildContext context, int index) {
+                return LugarTile(
+                  key: Key('L_$index'),
+                  lugar: state.listaLugares[index],
+                );
+              },
+              onReorder: (oldIndex, newIndex) {
+                context.read<LugarBloc>().add(ReorderListaLugares(
+                      oldIndex: oldIndex,
+                      newIndex: newIndex,
+                    ));
+              },
+            ),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

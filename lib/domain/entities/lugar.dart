@@ -1,35 +1,31 @@
+
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
-class Lugar {
-  final int? id;
+class Lugar extends Equatable {
+  final int id;
   final String nombre;
   final bool favorito;
   final DateTime? ultimoEditado;
 
-  Lugar({
-    this.id,
+  const Lugar({
+    this.id = -1,
     this.nombre = '',
     this.favorito = false,
     this.ultimoEditado,
   });
 
-  static List<Lugar> getLugares() {
-    return [
-      Lugar(id: 1, nombre: 'Portoviejo', favorito: true),
-      Lugar(id: 2, nombre: 'Manta', favorito: false),
-    ];
-  }
 
   Lugar copyWith({
-    ValueGetter<int?>? id,
+    int? id,
     String? nombre,
     bool? favorito,
     ValueGetter<DateTime?>? ultimoEditado,
   }) {
     return Lugar(
-      id: id != null ? id() : this.id,
+      id: id ?? this.id,
       nombre: nombre ?? this.nombre,
       favorito: favorito ?? this.favorito,
       ultimoEditado: ultimoEditado != null ? ultimoEditado() : this.ultimoEditado,
@@ -47,7 +43,7 @@ class Lugar {
 
   factory Lugar.fromMap(Map<String, dynamic> map) {
     return Lugar(
-      id: map['id']?.toInt(),
+      id: map['id']?.toInt() ?? -1,
       nombre: map['nombre'] ?? '',
       favorito: map['favorito'] ?? false,
       ultimoEditado: map['ultimoEditado'] != null ? DateTime.fromMillisecondsSinceEpoch(map['ultimoEditado']) : null,
@@ -57,4 +53,12 @@ class Lugar {
   String toJson() => json.encode(toMap());
 
   factory Lugar.fromJson(String source) => Lugar.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'Lugar(id: $id, nombre: $nombre, favorito: $favorito, ultimoEditado: $ultimoEditado)';
+  }
+
+  @override
+  List<Object?> get props => [id, nombre, favorito, ultimoEditado];
 }

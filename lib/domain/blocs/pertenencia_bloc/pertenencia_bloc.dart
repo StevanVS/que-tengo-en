@@ -14,8 +14,8 @@ part 'pertenencia_state.dart';
 class PertenenciaBloc extends Bloc<PertenenciaEvent, PertenenciaState> {
   final PertenenciaRepository _repository;
 
-  PertenenciaBloc({required PertenenciaRepository pertenenciaRepository})
-      : _repository = pertenenciaRepository,
+  PertenenciaBloc({required PertenenciaRepository repository})
+      : _repository = repository,
         super(PertenenciaState()) {
     on<SubscribePertenenciasStream>(_onSubscribePertenenciasStream);
     on<GetPertenencias>(_onGetPertenencias);
@@ -57,7 +57,7 @@ class PertenenciaBloc extends Bloc<PertenenciaEvent, PertenenciaState> {
       status: PertenenciaStatus.loading,
     ));
 
-    await _repository.getPertenencias(event.lugar.id!);
+    await _repository.getPertenencias(event.lugar.id);
   }
 
   Future<void> _onResetAllCantidad(
@@ -97,7 +97,6 @@ class PertenenciaBloc extends Bloc<PertenenciaEvent, PertenenciaState> {
     CreateOrEditPertenencia event,
     Emitter<PertenenciaState> emit,
   ) async {
-    print('create or edit ${event.pertenencia}');
     emit(state.copyWith(pertenencia: () => event.pertenencia));
   }
 
@@ -113,14 +112,17 @@ class PertenenciaBloc extends Bloc<PertenenciaEvent, PertenenciaState> {
             cantidadEnLugar: event.cantidadEnLugar,
             cantidadParaLlevar: event.cantidadParaLlevar)
         : Pertenencia(
-            lugarId: state.lugar!.id!,
+            lugarId: state.lugar!.id,
             nombre: event.nombre,
             cantidadEnLugar: event.cantidadEnLugar,
             cantidadParaLlevar: event.cantidadParaLlevar);
 
     try {
       await _repository.savePertenencia(pertenencia);
-      emit(state.copyWith(status: PertenenciaStatus.success));
+      emit(state.copyWith(
+        status: PertenenciaStatus.success,
+        pertenencia: null,
+      ));
     } catch (e) {
       emit(state.copyWith(status: PertenenciaStatus.failure));
     }

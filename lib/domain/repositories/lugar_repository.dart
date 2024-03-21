@@ -5,9 +5,13 @@ abstract class LugarRepository {
 
   Stream<List<Lugar>> getLugaresStream();
 
+  Future<void> getLugares();
+
   Future<void> saveLugar(Lugar lugar);
 
   Future<void> deleteLugar(int id);
+
+  Future<void> reorderListaLugares(int oldIndex, int newIndex);
 }
 
 class LugarNotFoundException implements Exception {}

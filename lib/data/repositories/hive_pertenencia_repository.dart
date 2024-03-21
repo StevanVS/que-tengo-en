@@ -32,7 +32,6 @@ class HivePertenenciaRepository implements PertenenciaRepository {
   @override
   Future<void> getPertenencias(int lugarId) async {
     _pertenenciaStreamController.drain();
-    // await Future.delayed(const Duration(seconds: 1));
 
     _kPertenenciasLugarStorageKey =
         '${kPertenenciaStorageKey}__LUGAR__${lugarId}__';
@@ -81,6 +80,15 @@ class HivePertenenciaRepository implements PertenenciaRepository {
     listaPertenencias.removeAt(index);
 
     await _saveLista(listaPertenencias);
+  }
+
+  @override
+  Future<void> deleteAllPertenencias(int lugarId) async {
+    _kPertenenciasLugarStorageKey =
+        '${kPertenenciaStorageKey}__LUGAR__${lugarId}__';
+
+    await _box.delete(_kPertenenciasLugarStorageKey);
+    _pertenenciaStreamController.drain();
   }
 
   @override

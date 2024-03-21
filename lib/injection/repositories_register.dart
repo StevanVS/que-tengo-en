@@ -16,12 +16,15 @@ class RepositoriesRegister {
   Future<void> register() async {
     final box = await Hive.openBox<String>(kDataBaseKey);
 
-    injector.registerSingleton<LugarRepository>(
-      () => HiveLugarRepository(box: box),
-    );
-
     injector.registerSingleton<PertenenciaRepository>(
       () => HivePertenenciaRepository(box: box),
+    );
+
+    injector.registerSingleton<LugarRepository>(
+      () => HiveLugarRepository(
+        box: box,
+        pertenenciaRepositry: injector.get<PertenenciaRepository>(),
+      ),
     );
   }
 }

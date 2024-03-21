@@ -7,13 +7,16 @@ class ModalForm extends StatelessWidget {
     required TextEditingController nombreController,
     required TextEditingController cantidadEnLugarController,
     required TextEditingController cantidadParaLlevarController,
+    required VoidCallback onAceptar,
   })  : _nombre = nombreController,
         _cantidadEnLugar = cantidadEnLugarController,
-        _cantidadParaLlevar = cantidadParaLlevarController;
+        _cantidadParaLlevar = cantidadParaLlevarController,
+        _onAceptar = onAceptar;
 
   final TextEditingController _nombre;
   final TextEditingController _cantidadEnLugar;
   final TextEditingController _cantidadParaLlevar;
+  final VoidCallback _onAceptar;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +25,9 @@ class ModalForm extends StatelessWidget {
         TextFormField(
           controller: _nombre,
           autofocus: true,
+          onFieldSubmitted: (_) {
+            _onAceptar();
+          },
           decoration: const InputDecoration(
             hintText: "Nombre",
           ),

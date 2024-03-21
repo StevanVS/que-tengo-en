@@ -4,7 +4,11 @@ sealed class LugarEvent extends Equatable {
   const LugarEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
+}
+
+class SubscribeLugaresStream extends LugarEvent {
+  const SubscribeLugaresStream();
 }
 
 class GetLugares extends LugarEvent {
@@ -20,13 +24,22 @@ class ToggleFavorito extends LugarEvent {
   List<Object> get props => [lugar];
 }
 
-class SubmitLugar extends LugarEvent {
-  final Lugar lugar;
+class CreateOrEditLugar extends LugarEvent {
+  final Lugar? lugar;
 
-  const SubmitLugar(this.lugar);
+  const CreateOrEditLugar(this.lugar);
 
   @override
-  List<Object> get props => [lugar];
+  List<Object?> get props => [lugar];
+}
+
+class SubmitLugar extends LugarEvent {
+  final String nombre;
+
+  const SubmitLugar(this.nombre);
+
+  @override
+  List<Object> get props => [nombre];
 }
 
 class DeleteLugar extends LugarEvent {
@@ -46,7 +59,7 @@ class ReorderListaLugares extends LugarEvent {
     required this.oldIndex,
     required this.newIndex,
   });
-  
+
   @override
   List<Object> get props => [oldIndex, newIndex];
 }

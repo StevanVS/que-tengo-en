@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:que_tengo_en/domain/blocs/blocs.dart';
 import 'package:que_tengo_en/domain/entities/lugar.dart';
 import 'package:que_tengo_en/ui/pages/lista_pertenencias/lista_pertenencias_page.dart';
 import 'package:que_tengo_en/ui/pages/modal_lugar/modal_lugar.dart';
@@ -24,7 +26,9 @@ class LugarTile extends StatelessWidget {
             child: Row(
               children: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.read<LugarBloc>().add(ToggleFavorito(lugar));
+                  },
                   icon: Icon(
                     lugar.favorito
                         ? Icons.star_rounded
@@ -45,8 +49,6 @@ class LugarTile extends StatelessWidget {
                   onPressed: () {
                     ModalLugar.mostrarLugarModal(context, lugar);
                   },
-                  // iconSize: 20,
-                  // icon: const Icon(Icons.edit_rounded),
                   icon: const Icon(Icons.more_vert_rounded),
                 ),
               ],

@@ -12,6 +12,8 @@ abstract class PertenenciaRepository {
 
   Future<void> deletePertenencia(int id);
 
+  Future<void> deleteAllPertenencias(int lugarId);
+
   Future<void> resetAllCantidad(TipoCantidad tipoCantidad);
 
   Future<void> reorderListaPertenencias(int oldIndex, int newIndex);

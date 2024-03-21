@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:que_tengo_en/domain/blocs/blocs.dart';
 import 'package:que_tengo_en/domain/entities/lugar.dart';
 import 'package:que_tengo_en/ui/pages/lista_pertenencias/widgets/pertenencia_tile.dart';
+import 'package:que_tengo_en/ui/widgets/center_text_list_empty.dart';
 
 import 'widgets/encabezado_lista_pertenencias.dart';
 import '../modal_pertenencia/modal_pertenencia.dart';
@@ -45,15 +46,7 @@ class _ListaPertenenciasPageState extends State<ListaPertenenciasPage> {
           }
 
           if (state.listaPertenencias.isEmpty) {
-            return Center(
-              child: Text(
-                'No existen Pertenencias',
-                style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            );
+            return const CenterTextForEmptyList('No existen Pertenencias');
           }
 
           return SingleChildScrollView(
@@ -71,7 +64,7 @@ class _ListaPertenenciasPageState extends State<ListaPertenenciasPage> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (BuildContext context, int index) {
                       return PertenenciaTile(
-                        key: Key('$index'),
+                        key: Key('P_$index'),
                         pertenencia: state.listaPertenencias[index],
                       );
                     },

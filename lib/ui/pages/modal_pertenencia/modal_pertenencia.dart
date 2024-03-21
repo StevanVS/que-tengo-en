@@ -63,8 +63,6 @@ class _ModalPertenenciaState extends State<ModalPertenencia> {
     final bloc = context.read<PertenenciaBloc>();
     final pertenencia = bloc.state.pertenencia;
 
-    assert(pertenencia?.id != null, 'El id de Pertenenecia no puede ser null');
-
     if (pertenencia != null) {
       bloc.add(DeletePertenencia(pertenencia.id));
       Navigator.of(context).pop();
@@ -80,7 +78,6 @@ class _ModalPertenenciaState extends State<ModalPertenencia> {
         cantidadEnLugar: int.parse(enLugar.text),
         cantidadParaLlevar: int.parse(paraLlevar.text),
       ));
-
       Navigator.of(context).pop();
     }
   }
@@ -111,6 +108,7 @@ class _ModalPertenenciaState extends State<ModalPertenencia> {
               nombreController: nombre,
               cantidadEnLugarController: enLugar,
               cantidadParaLlevarController: paraLlevar,
+              onAceptar: _onAceptar,
             ),
             const SizedBox(height: 16.0),
             ModalFooter(onAceptar: _onAceptar),
