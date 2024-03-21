@@ -4,7 +4,11 @@ part of 'pertenencia_bloc.dart';
 sealed class PertenenciaEvent extends Equatable {
   const PertenenciaEvent();
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
+}
+
+class SubscribePertenenciasStream extends PertenenciaEvent {
+  const SubscribePertenenciasStream();
 }
 
 class GetPertenencias extends PertenenciaEvent {
@@ -39,20 +43,37 @@ class IncrementCantidad extends PertenenciaEvent {
   final Pertenencia pertenencia;
   final TipoCantidad tipoCantidad;
 
-  const IncrementCantidad(
-      {required this.pertenencia, required this.tipoCantidad});
+  const IncrementCantidad({
+    required this.pertenencia,
+    required this.tipoCantidad,
+  });
 
   @override
   List<Object> get props => [pertenencia, tipoCantidad];
 }
 
-class SubmitPertenencia extends PertenenciaEvent {
-  final Pertenencia pertenencia;
+class CreateOrEditPertenencia extends PertenenciaEvent {
+  final Pertenencia? pertenencia;
 
-  const SubmitPertenencia(this.pertenencia);
+  const CreateOrEditPertenencia(this.pertenencia);
 
   @override
-  List<Object> get props => [pertenencia];
+  List<Object?> get props => [pertenencia];
+}
+
+class SubmitPertenencia extends PertenenciaEvent {
+  final String nombre;
+  final int cantidadEnLugar;
+  final int cantidadParaLlevar;
+
+  const SubmitPertenencia({
+    required this.nombre,
+    required this.cantidadEnLugar,
+    required this.cantidadParaLlevar,
+  });
+
+  @override
+  List<Object> get props => [nombre, cantidadEnLugar, cantidadParaLlevar];
 }
 
 class DeletePertenencia extends PertenenciaEvent {
@@ -72,7 +93,7 @@ class ReorderListaPertenencias extends PertenenciaEvent {
     required this.oldIndex,
     required this.newIndex,
   });
-  
+
   @override
   List<Object> get props => [oldIndex, newIndex];
 }

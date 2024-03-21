@@ -27,7 +27,8 @@ class BlocsProvider extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => Injector.appInstance.get<PertenenciaBloc>(),
+          create: (context) => Injector.appInstance.get<PertenenciaBloc>()
+            ..add(const SubscribePertenenciasStream()),
         )
       ],
       child: const MyApp(),

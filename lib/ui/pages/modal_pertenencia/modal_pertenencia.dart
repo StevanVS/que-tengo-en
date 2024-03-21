@@ -28,6 +28,9 @@ class ModalPertenencia extends StatefulWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),
       ),
       builder: (context) {
+        context
+            .read<PertenenciaBloc>()
+            .add(CreateOrEditPertenencia(pertenencia));
         return ModalPertenencia(pertenencia: pertenencia);
       },
     );
@@ -56,8 +59,38 @@ class _ModalPertenenciaState extends State<ModalPertenencia> {
     super.dispose();
   }
 
+  _onEliminar() {
+    final bloc = context.read<PertenenciaBloc>();
+    final pertenencia = bloc.state.pertenencia;
+
+    assert(pertenencia?.id != null, 'El id de Pertenenecia no puede ser null');
+
+    if (pertenencia != null) {
+      bloc.add(DeletePertenencia(pertenencia.id));
+      Navigator.of(context).pop();
+    }
+  }
+
+  _onAceptar() {
+    final bloc = context.read<PertenenciaBloc>();
+
+    if (_formKey.currentState!.validate()) {
+      bloc.add(SubmitPertenencia(
+        nombre: nombre.text.trim(),
+        cantidadEnLugar: int.parse(enLugar.text),
+        cantidadParaLlevar: int.parse(paraLlevar.text),
+      ));
+
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final esParaCrear = context.select(
+      (PertenenciaBloc bloc) => bloc.state.esNuevaPertenencia,
+    );
+
     return Container(
       padding: const EdgeInsets.all(15).copyWith(
         bottom: MediaQuery.of(context).viewInsets.bottom + 15,
@@ -69,17 +102,9 @@ class _ModalPertenenciaState extends State<ModalPertenencia> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ModalHeader(
-              esParaCrear: widget.pertenencia == null,
+              esParaCrear: esParaCrear,
               nombre: 'Pertenencia',
-              onEliminar: () {
-                if (widget.pertenencia?.id == null) return;
-
-                context
-                    .read<PertenenciaBloc>()
-                    .add(DeletePertenencia(widget.pertenencia!.id!));
-
-                Navigator.of(context).pop();
-              },
+              onEliminar: _onEliminar,
             ),
             const SizedBox(height: 10.0),
             ModalForm(
@@ -88,28 +113,7 @@ class _ModalPertenenciaState extends State<ModalPertenencia> {
               cantidadParaLlevarController: paraLlevar,
             ),
             const SizedBox(height: 16.0),
-            ModalFooter(
-              onAceptar: () {
-                final bloc = context.read<PertenenciaBloc>();
-                final lugar = bloc.state.lugar;
-
-                if (_formKey.currentState!.validate()) {
-                  final pertenencia = widget.pertenencia != null
-                      ? widget.pertenencia!.copyWith(
-                          nombre: nombre.text.trim(),
-                          cantidadEnLugar: int.parse(enLugar.text),
-                          cantidadParaLlevar: int.parse(paraLlevar.text))
-                      : Pertenencia(
-                          lugarId: lugar!.id,
-                          nombre: nombre.text.trim(),
-                          cantidadEnLugar: int.parse(enLugar.text),
-                          cantidadParaLlevar: int.parse(paraLlevar.text));
-
-                  bloc.add(SubmitPertenencia(pertenencia));
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
+            ModalFooter(onAceptar: _onAceptar),
           ],
         ),
       ),

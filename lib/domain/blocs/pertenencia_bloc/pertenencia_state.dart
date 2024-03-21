@@ -17,7 +17,7 @@ class PertenenciaState {
     this.status = PertenenciaStatus.initial
   });
   
-
+  bool get esNuevaPertenencia => pertenencia == null;
 
   PertenenciaState copyWith({
     ValueGetter<Lugar?>? lugar,

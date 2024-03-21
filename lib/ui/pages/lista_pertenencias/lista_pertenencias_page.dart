@@ -15,7 +15,7 @@ class ListaPertenenciasPage extends StatefulWidget {
   @override
   State<ListaPertenenciasPage> createState() => _ListaPertenenciasPageState();
 
-  static MaterialPageRoute router(Lugar lugar) {
+  static MaterialPageRoute route(Lugar lugar) {
     return MaterialPageRoute(
       builder: (context) => ListaPertenenciasPage(lugar: lugar),
     );
@@ -27,12 +27,6 @@ class _ListaPertenenciasPageState extends State<ListaPertenenciasPage> {
   void initState() {
     super.initState();
     context.read<PertenenciaBloc>().add(GetPertenencias(lugar: widget.lugar));
-  }
-
-  @override
-  void dispose() {
-    debugPrint('lista p dispose');
-    super.dispose();
   }
 
   @override
@@ -68,11 +62,12 @@ class _ListaPertenenciasPageState extends State<ListaPertenenciasPage> {
               child: Column(
                 children: [
                   const SizedBox(height: 10),
-                  const EncabezadoListaPertenencias(),
-                  const SizedBox(height: 8),
                   ReorderableListView.builder(
+                    header: const EncabezadoListaPertenencias(),
                     itemCount: state.listaPertenencias.length,
                     shrinkWrap: true,
+                    buildDefaultDragHandles:
+                        Theme.of(context).platform != TargetPlatform.windows,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (BuildContext context, int index) {
                       return PertenenciaTile(
@@ -81,12 +76,12 @@ class _ListaPertenenciasPageState extends State<ListaPertenenciasPage> {
                       );
                     },
                     onReorder: (oldIndex, newIndex) {
-                      context
-                          .read<PertenenciaBloc>()
-                          .add(ReorderListaPertenencias(
-                            oldIndex: oldIndex,
-                            newIndex: newIndex,
-                          ));
+                      context.read<PertenenciaBloc>().add(
+                            ReorderListaPertenencias(
+                              oldIndex: oldIndex,
+                              newIndex: newIndex,
+                            ),
+                          );
                     },
                   ),
                 ],

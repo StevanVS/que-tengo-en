@@ -6,6 +6,8 @@ abstract class PertenenciaRepository {
 
   Stream<List<Pertenencia>> getPertenenciasStream();
 
+  Future<void> getPertenencias(int lugarId);
+
   Future<void> savePertenencia(Pertenencia pertenencia);
 
   Future<void> deletePertenencia(int id);

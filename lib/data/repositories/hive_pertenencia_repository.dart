@@ -8,20 +8,36 @@ import 'package:que_tengo_en/domain/repositories/pertenencia_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HivePertenenciaRepository implements PertenenciaRepository {
-  final _pertenenciaStreamController =
-      BehaviorSubject<List<Pertenencia>>.seeded(const []);
+  final _pertenenciaStreamController = BehaviorSubject<List<Pertenencia>>();
 
   final Box<String> _box;
 
-  static const kPertenenciaDataBaseKey = '__PERTENENCIA_DB_KEY__';
   static const kPertenenciaStorageKey = '__PERTENENCIA_STORAGE_KEY__';
+  String _kPertenenciasLugarStorageKey = '';
 
-  HivePertenenciaRepository({required Box<String> box}) : _box = box {
-    _init();
+  HivePertenenciaRepository({required Box<String> box}) : _box = box;
+
+  _saveLista(List<Pertenencia> listaPertenencias) async {
+    _pertenenciaStreamController.add(listaPertenencias);
+    await _box.put(
+      _kPertenenciasLugarStorageKey,
+      json.encode(listaPertenencias),
+    );
   }
 
-  _init() async {
-    final pertenenciaJson = _box.get(kPertenenciaStorageKey);
+  @override
+  Stream<List<Pertenencia>> getPertenenciasStream() =>
+      _pertenenciaStreamController.asBroadcastStream();
+
+  @override
+  Future<void> getPertenencias(int lugarId) async {
+    _pertenenciaStreamController.drain();
+    // await Future.delayed(const Duration(seconds: 1));
+
+    _kPertenenciasLugarStorageKey =
+        '${kPertenenciaStorageKey}__LUGAR__${lugarId}__';
+
+    final pertenenciaJson = _box.get(_kPertenenciasLugarStorageKey);
 
     if (pertenenciaJson != null) {
       final pertenencias = (json.decode(pertenenciaJson) as List)
@@ -34,11 +50,6 @@ class HivePertenenciaRepository implements PertenenciaRepository {
   }
 
   @override
-  Stream<List<Pertenencia>> getPertenenciasStream() {
-    return _pertenenciaStreamController.asBroadcastStream();
-  }
-
-  @override
   Future<void> savePertenencia(Pertenencia pertenencia) async {
     final listaPertenencias = [..._pertenenciaStreamController.value];
     final index = listaPertenencias.indexWhere((p) => p.id == pertenencia.id);
@@ -48,15 +59,14 @@ class HivePertenenciaRepository implements PertenenciaRepository {
     } else {
       late int id;
       if (listaPertenencias.isNotEmpty) {
-        id = listaPertenencias.map<int>((p) => p.id ?? 0).toList().reduce(max);
+        id = listaPertenencias.map<int>((p) => p.id).toList().reduce(max);
       } else {
         id = 0;
       }
-
-      listaPertenencias.add(pertenencia.copyWith(id: () => id + 1));
+      listaPertenencias.add(pertenencia.copyWith(id: id + 1));
     }
-    _pertenenciaStreamController.add(listaPertenencias);
-    await _box.put(kPertenenciaStorageKey, json.encode(listaPertenencias));
+
+    await _saveLista(listaPertenencias);
   }
 
   @override
@@ -70,8 +80,7 @@ class HivePertenenciaRepository implements PertenenciaRepository {
 
     listaPertenencias.removeAt(index);
 
-    _pertenenciaStreamController.add(listaPertenencias);
-    await _box.put(kPertenenciaStorageKey, json.encode(listaPertenencias));
+    await _saveLista(listaPertenencias);
   }
 
   @override
@@ -84,8 +93,7 @@ class HivePertenenciaRepository implements PertenenciaRepository {
           : p.copyWith(cantidadParaLlevar: 0);
     }).toList();
 
-    _pertenenciaStreamController.add(newListaPertenencias);
-    await _box.put(kPertenenciaStorageKey, json.encode(newListaPertenencias));
+    await _saveLista(newListaPertenencias);
   }
 
   @override
@@ -95,11 +103,10 @@ class HivePertenenciaRepository implements PertenenciaRepository {
     if (oldIndex < newIndex) {
       newIndex -= 1;
     }
-    
-    final Pertenencia pertenencia = listaPertenencias.removeAt(oldIndex);
+
+    final pertenencia = listaPertenencias.removeAt(oldIndex);
     listaPertenencias.insert(newIndex, pertenencia);
 
-    _pertenenciaStreamController.add(listaPertenencias);
-    await _box.put(kPertenenciaStorageKey, json.encode(listaPertenencias));
+    await _saveLista(listaPertenencias);
   }
 }

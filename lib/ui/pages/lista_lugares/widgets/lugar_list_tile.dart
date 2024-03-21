@@ -36,7 +36,7 @@ class LugarListTile extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              ListaPertenenciasPage.router(lugar),
+              ListaPertenenciasPage.route(lugar),
             );
           },
           contentPadding: const EdgeInsets.all(0),

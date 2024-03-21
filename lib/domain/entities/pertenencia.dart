@@ -1,33 +1,32 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
 
 class Pertenencia extends Equatable {
-  final int? id;
+  final int id;
   final int lugarId;
   final String nombre;
   final int cantidadEnLugar;
   final int cantidadParaLlevar;
 
   const Pertenencia({
-    this.id,
-    required this.lugarId,
-    required this.nombre,
-    required this.cantidadEnLugar,
-    required this.cantidadParaLlevar,
+    this.id = -1,
+    this.lugarId = -1,
+    this.nombre = '',
+    this.cantidadEnLugar = 0,
+    this.cantidadParaLlevar = 0,
   });
 
 
   Pertenencia copyWith({
-    ValueGetter<int?>? id,
+    int? id,
     int? lugarId,
     String? nombre,
     int? cantidadEnLugar,
     int? cantidadParaLlevar,
   }) {
     return Pertenencia(
-      id: id != null ? id() : this.id,
+      id: id ?? this.id,
       lugarId: lugarId ?? this.lugarId,
       nombre: nombre ?? this.nombre,
       cantidadEnLugar: cantidadEnLugar ?? this.cantidadEnLugar,
@@ -47,7 +46,7 @@ class Pertenencia extends Equatable {
 
   factory Pertenencia.fromMap(Map<String, dynamic> map) {
     return Pertenencia(
-      id: map['id']?.toInt(),
+      id: map['id']?.toInt() ?? 0,
       lugarId: map['lugarId']?.toInt() ?? 0,
       nombre: map['nombre'] ?? '',
       cantidadEnLugar: map['cantidadEnLugar']?.toInt() ?? 0,
@@ -65,7 +64,7 @@ class Pertenencia extends Equatable {
   }
 
   @override
-  List<Object?> get props {
+  List<Object> get props {
     return [
       id,
       lugarId,
